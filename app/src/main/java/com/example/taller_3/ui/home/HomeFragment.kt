@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.taller_3.Adapters.HomeAdapter
 import com.example.taller_3.R
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.item_home.view.*
@@ -39,41 +40,14 @@ class HomeFragment : Fragment() {
     ): View? {
         mView = inflater.inflate(R.layout.fragment_home, container, false)
 
-
         mView.recyclerView.layoutManager= LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        mView.recyclerView.adapter=HomeAdapter(data1)
+        mView.recyclerView.adapter=context?.let { HomeAdapter(data1) }
         mView.recyclerView1.layoutManager= LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        mView.recyclerView1.adapter=HomeAdapter(data2)
+        mView.recyclerView1.adapter=context?.let { HomeAdapter(data2) }
 
         return mView
     }
 
-    private class HomeAdapter(val HomeList:ArrayList<HomeView>) :
-        RecyclerView.Adapter<HomeAdapter.ProductViewHolder>() {
-
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-            val itemView =
-                LayoutInflater.from(parent.context).inflate(R.layout.item_home, parent, false)
-
-            return ProductViewHolder(
-                itemView,
-                itemView.text_item,
-                itemView.image_item
-            )
-        }
-
-        override fun getItemCount(): Int = HomeList.size
-
-        override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-            val home = HomeList[position]
-            val icon= ContextCompat.getDrawable(holder.image.context,home.image)
-            holder.image.setImageDrawable(icon)
-            holder.Txt.text = home.name
-        }
-        class ProductViewHolder(val view: View, val Txt: TextView, val image: ImageView) :
-            RecyclerView.ViewHolder(view)
-    }
-
-        }
+}
 
 
