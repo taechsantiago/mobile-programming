@@ -3,4 +3,9 @@
     <string name="title_home">Home</string>
     <string name="title_albums">Albums</string>
     <string name="title_tracks">Tracks</string>
+    
+    <string name="title_track">I wanna be yours</string>
+    <string name="artist_track">Arctic Monkeys</string>
+    <string name="duration_track">3:20</string>
+    <string name="play_track">Playing</string>
 </resources>
