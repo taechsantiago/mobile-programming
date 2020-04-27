@@ -3,7 +3,11 @@ package com.example.taller_3.DataBase
 import androidx.lifecycle.LiveData
 
 class TracksRepository (private val tracksDao: TracksDao){
-    val cartProducts: LiveData<List<Tracks>> =tracksDao.getAll()
+    val tracksList: LiveData<List<Tracks>> =tracksDao.getAll()
+    val amTrackList:LiveData<List<Tracks>> =tracksDao.findByAlbum("AM")
+    val coloresTrackList:LiveData<List<Tracks>> =tracksDao.findByAlbum("Colores")
+    val yhlqmdlgTrackList:LiveData<List<Tracks>> =tracksDao.findByAlbum("YHLQMDLG")
+    val quepasaTrackList:LiveData<List<Tracks>> =tracksDao.findByAlbum("¿Que pasa en casa?")
 
     //se usa para agregar las canciones a la tabla tracks
     suspend fun insert(track: Tracks) {

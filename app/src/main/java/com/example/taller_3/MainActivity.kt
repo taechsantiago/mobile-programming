@@ -40,6 +40,6 @@ class MainActivity : AppCompatActivity() {
         tracksViewModel.saveTrack(Tracks(5,"Morado","J Balvin","3:44","Colores",R.raw.au_morado,R.drawable.album_colores))
         tracksViewModel.saveTrack(Tracks(6,"Safaera","Bad Bunny","2:43","YHLQMDLG",R.raw.au_safaera,R.drawable.album_yhlqmdlg))
         tracksViewModel.saveTrack(Tracks(7,"Why'd you only call me when you're high","Arctic Monkeys","2:43","AM",R.raw.whyd_you_only_call_me_when_youre_high,R.drawable.album_am))
-        tracksViewModel.saveTrack(Tracks(8,"La Luna","La Toma","2:43","¿Que pasa en casa?",R.raw.la_luna,R.drawable.album_la_toma))
+        tracksViewModel.saveTrack(Tracks(8,"Otra noche","Bad Bunny","2:43","YHLQMDLG",R.raw.au_otranoche,R.drawable.album_yhlqmdlg))
     }
 }

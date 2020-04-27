@@ -98,15 +98,10 @@ class AlbumsFragment : Fragment(), OnItemClickListener{
     override fun onItemClick(view: View, position: Int) {
         val navController = findNavController()
         val albums= data[position]
-        val name= albums.album_name
-        Toast.makeText(context,name, Toast.LENGTH_SHORT).show()
-        var bundle = Bundle()
+        val bundle = Bundle()
         bundle.putString("Album", albums.album_name)
         navController.navigate(R.id.navigation_albumlist, bundle)
     }
-
-
-
 }
 
 
