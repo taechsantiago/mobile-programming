@@ -10,6 +10,16 @@
         android:name="com.example.taller_3.ui.albums.AlbumsFragment"
         android:label="@string/title_albums"
         tools:layout="@layout/fragment_albums" />
+    <fragment
+        android:id="@+id/navigation_albumlist"
+        android:name="com.example.taller_3.ui.albums.AlbumList"
+        android:label="Album List"
+        tools:layout="@layout/album_list">
+    <argument
+        android:name="Album"
+        app:argType="string" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_home"
