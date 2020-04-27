@@ -11,12 +11,22 @@ class TracksViewModel (application: Application) : AndroidViewModel(application)
     private val repository: TracksRepository
     val tracksList: LiveData<List<Tracks>>
 
+    val amTrackList:LiveData<List<Tracks>>
+    val coloresTrackList:LiveData<List<Tracks>>
+    val yhlqmdlgTrackList:LiveData<List<Tracks>>
+    val quepasaTrackList:LiveData<List<Tracks>>
+
     init {
         //se inicializan las variables correspondientes para encadenar el repository y el dao
         //con el viewmodel
         val tracksDao = TracksRoomDatabase.getDatabase(application).tracksDao()
         repository = TracksRepository(tracksDao)
-        tracksList=repository.cartProducts
+        tracksList=repository.tracksList
+
+        amTrackList=repository.amTrackList
+        coloresTrackList=repository.coloresTrackList
+        yhlqmdlgTrackList=repository.yhlqmdlgTrackList
+        quepasaTrackList=repository.quepasaTrackList
     }
     //funcion con la cual se guardan productos desde la interfaz
     fun saveTrack(track: Tracks) = viewModelScope.launch(Dispatchers.IO) {

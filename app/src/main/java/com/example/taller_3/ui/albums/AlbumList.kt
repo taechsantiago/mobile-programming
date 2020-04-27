@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.taller_3.Adapters.TracksListAdapter
 import com.example.taller_3.DataBase.Tracks
 import com.example.taller_3.DataBase.TracksRoomDatabase
 import com.example.taller_3.DataBase.TracksViewModel
@@ -23,8 +24,10 @@ import kotlinx.android.synthetic.main.item_track.view.*
 
 class AlbumList: Fragment() {
     private lateinit var mView: View
-    private lateinit var albumAdapter: AlbumAdapter
+
     private lateinit var tracksViewModel: TracksViewModel
+    private lateinit var album_list_recycler:RecyclerView
+    private lateinit var album_name:String
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,70 +37,65 @@ class AlbumList: Fragment() {
         tracksViewModel= activity?.run{ViewModelProvider(this).get(TracksViewModel::class.java)
             }?: throw Exception("Invalid activity")
 
-        //addObserver()
+        arguments?.apply {
+            album_name=getString("Album") ?: ""
+        }
+
+        addObserver()
 
         return mView
     }
 
-    private fun loadAlbumList(album: String) {
+    private fun addObserver() {
+        val adapter = context?.let { TracksListAdapter(it) }
+        album_list_recycler=mView.findViewById(R.id.album_list_recycler)
+        album_list_recycler.layoutManager= LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+        album_list_recycler.adapter = adapter
 
-
-        albumAdapter = AlbumAdapter()
-
-        //albumAdapter.itemClickListener = context
-
-        mView.album_list_recycler.adapter = albumAdapter
-        mView.album_list_recycler.layoutManager = LinearLayoutManager(context)
-
-
+        when (album_name) {
+            "AM" -> {
+                tracksViewModel.amTrackList.observe(viewLifecycleOwner, Observer { tracksList ->
+                    tracksList?.let {
+                        if (adapter != null) {
+                            adapter.setTracks(it)
+                        }
+                    }
+                })
+            }
+            "Colores" -> {
+                tracksViewModel.coloresTrackList.observe(viewLifecycleOwner, Observer { tracksList ->
+                    tracksList?.let {
+                        if (adapter != null) {
+                            adapter.setTracks(it)
+                        }
+                    }
+                })
+            }
+            "YHLQMDLG" -> {
+                tracksViewModel.yhlqmdlgTrackList.observe(viewLifecycleOwner, Observer { tracksList ->
+                    tracksList?.let {
+                        if (adapter != null) {
+                            adapter.setTracks(it)
+                        }
+                    }
+                })
+            }
+            else -> {
+                tracksViewModel.quepasaTrackList.observe(viewLifecycleOwner, Observer { tracksList ->
+                    tracksList?.let {
+                        if (adapter != null) {
+                            adapter.setTracks(it)
+                        }
+                    }
+                })
+            }
+        }
 
     }
 
 
 
-    private class AlbumAdapter() :
-        RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
-
-        var data: List<Tracks> = emptyList()
-        var itemClickListener: OnItemClickListener?=null
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
-            val itemView =
-                LayoutInflater.from(parent.context).inflate(R.layout.item_track, parent, false)
-
-            return AlbumViewHolder(
-                itemView,
-                itemView.track_imag,
-                itemView.track_name_text,
-                itemView.track_artist_text,
-                itemView.track_duration_text
-            )
-        }
-
-        override fun getItemCount(): Int = data.size
-
-        override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
-            val album = data[position]
-
-            val icon= ContextCompat.getDrawable(holder.img.context,album.image)
-            holder.img.setImageDrawable(icon)
-            holder.nameTxt.text=album.name
-            holder.artist.text=album.artist
-            holder.duration.text=album.duration
-            holder.view.setOnClickListener{
-                itemClickListener?.onItemClick(it, holder.adapterPosition)
-            }
-
-            }
-        class AlbumViewHolder(val view: View, val img: ImageView, val nameTxt: TextView, val artist:TextView ,val duration: TextView) :
-            RecyclerView.ViewHolder(view)
-
-
-
-        }
-
-
-        }
+}
 
 
 
