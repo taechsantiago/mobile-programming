@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taller_3.DataBase.Tracks
 import com.example.taller_3.R
@@ -38,6 +40,11 @@ class TracksListAdapter internal constructor(private val context: Context) : Rec
         holder.name.text=track.name
         holder.artist.text="${track.artist}"
         holder.duration.text="${track.duration}"
+
+        holder.view.setOnClickListener {
+            val bundle = bundleOf("track_code" to track.code)
+            holder.view.findNavController().navigate(R.id.action_track_to_track_description, bundle)
+        }
 
     }
 

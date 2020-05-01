@@ -11,19 +11,19 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
         android:text="Most Popular Artists"
-        android:textStyle="bold"
+        android:textColor="@color/color_letters"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/recyclerView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="30dp"
-        android:layout_marginStart="20dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,20 +33,19 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
         android:text="New Albums"
+        android:textColor="@color/color_letters"
         android:textSize="20sp"
-
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/recyclerView1"
         app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView1"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="35dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
