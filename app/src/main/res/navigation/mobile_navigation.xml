@@ -6,19 +6,22 @@
     app:startDestination="@+id/navigation_home">
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_albums"
         android:name="com.example.taller_3.ui.albums.AlbumsFragment"
         android:label="@string/title_albums"
-        tools:layout="@layout/fragment_albums" />
+        tools:layout="@layout/fragment_albums" >
+        <action
+            android:id="@+id/action_album_to_albumtracklist"
+            app:destination="@id/albumlist"/>
+    </fragment>
     <fragment
-        android:id="@+id/navigation_albumlist"
-        android:name="com.example.taller_3.ui.albums.AlbumList"
+        android:id="@+id/albumlist"
+        android:name="com.example.taller_3.ui.albums.AlbumTrackListFragment"
         android:label="Album List"
-        tools:layout="@layout/album_list">
-    <argument
-        android:name="Album"
-        app:argType="string" />
-
+        tools:layout="@layout/fragment_album_tracks_list">
+        <action
+            android:id="@+id/action_track_to_track_description"
+            app:destination="@id/track_description"/>
     </fragment>
 
     <fragment
@@ -28,8 +31,17 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_tracks"
         android:name="com.example.taller_3.ui.tracks.TracksFragment"
         android:label="@string/title_tracks"
-        tools:layout="@layout/fragment_tracks" />
+        tools:layout="@layout/fragment_tracks">
+        <action
+            android:id="@+id/action_track_to_track_description"
+            app:destination="@id/track_description"/>
+    </fragment>
+    <fragment
+        android:id="@+id/track_description"
+        android:name="com.example.taller_3.ui.tracks.TracksDescriptionFragment"
+        android:label="@string/title_track_description"
+        tools:layout="@layout/fragment_tracks_description" />
 </navigation>
