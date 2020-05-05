@@ -1,15 +1,21 @@
 package com.example.taller_3.ui.tracks
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.taller_3.DataBase.TracksViewModel
+import com.example.taller_3.MainActivity.Companion.NOTIFICATION_ID_BASIC
 import com.example.taller_3.R
+import kotlinx.android.synthetic.main.fragment_tracks_description.*
+import kotlinx.android.synthetic.main.fragment_tracks_description.view.*
 import kotlin.properties.Delegates
 
 class TracksDescriptionFragment: Fragment() {
@@ -17,7 +23,7 @@ class TracksDescriptionFragment: Fragment() {
     private lateinit var mView: View
 
     private lateinit var tracksViewModel: TracksViewModel
-
+    private lateinit var mp:MediaPlayer
     private var track_code by Delegates.notNull<Int>()
     private lateinit var image_track: ImageView
 
@@ -45,7 +51,9 @@ class TracksDescriptionFragment: Fragment() {
 
         mView.findViewById<TextView>(R.id.track_title_text_description).text=track.name
         mView.findViewById<TextView>(R.id.track_artist_text_description).text=track.artist
-
+        tracksViewModel= ViewModelProvider(this).get(TracksViewModel::class.java)
         return mView
     }
+
+
 }
