@@ -1,24 +1,48 @@
 package com.example.taller_3
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.taller_3.AppConstants.Companion.ACTION_NEXT
+import com.example.taller_3.AppConstants.Companion.ACTION_PLAY
+import com.example.taller_3.AppConstants.Companion.ACTION_PREVIOUS
 import com.example.taller_3.DataBase.Tracks
 import com.example.taller_3.DataBase.TracksViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        const val NOTIFICATION_CHANNEL_HIGH = "NOTIFICATION_CHANNEL_HIGH"
+        const val NOTIFICATION_ID_BASIC = 100
+
+    }
+
 
     private lateinit var tracksViewModel: TracksViewModel
+    private lateinit var tracks: Tracks
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
+
 
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
@@ -68,4 +92,11 @@ class MainActivity : AppCompatActivity() {
         tracksViewModel.saveTrack(Tracks(32,"Why'd you only call me when you're high","Arctic Monkeys","2:43","AM",R.raw.whyd_you_only_call_me_when_youre_high_am,R.drawable.album_am))
         tracksViewModel.saveTrack(Tracks(33,"Yo perreo sola","Bad Bunny","2:43","YHLQMDLG",R.raw.yo_perreo_sola_yhlqmdlg,R.drawable.album_yhlqmdlg))
     }
+
+
+
+
+
 }
+
+
