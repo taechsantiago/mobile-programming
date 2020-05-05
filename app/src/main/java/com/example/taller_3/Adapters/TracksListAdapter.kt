@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.service.notification.NotificationListenerService
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +26,8 @@ import com.example.taller_3.MainActivity
 import com.example.taller_3.NotificationActionActivity
 import com.example.taller_3.R
 import kotlinx.android.synthetic.main.item_track.view.*
+import java.security.AccessController.getContext
+
 
 class TracksListAdapter internal constructor(private val context: Context) : RecyclerView.Adapter<TracksListAdapter.ViewHolder>() {
 
@@ -60,16 +61,16 @@ class TracksListAdapter internal constructor(private val context: Context) : Rec
         holder.view.setOnClickListener {
             val bundle = bundleOf("track_code" to track.code)
             holder.view.findNavController().navigate(R.id.action_track_to_track_description, bundle)
-            showCustomMessageNotification(holder.view)
+            showCustomMessageNotification(track.artist, track.name)
         }
 
     }
 
-    fun showCustomMessageNotification(view: View) {
-        NotificationManagerCompat.from(context).notify(MainActivity.NOTIFICATION_ID_BASIC, showBasicNotification())
+    fun showCustomMessageNotification(artist: String, name: String) {
+        NotificationManagerCompat.from(context).notify(MainActivity.NOTIFICATION_ID_BASIC, showBasicNotification(artist,name))
     }
 
-    fun showBasicNotification() : Notification {
+    fun showBasicNotification(artist: String, name: String) : Notification {
 
         val intentPrevious = Intent(AppConstants.ACTION_PREVIOUS, null, context, NotificationActionActivity::class.java)
         val intentPlay = Intent(AppConstants.ACTION_PLAY, null, context, NotificationActionActivity::class.java)
@@ -78,12 +79,14 @@ class TracksListAdapter internal constructor(private val context: Context) : Rec
         val pendingIntentPrevious = PendingIntent.getActivity(context, 800, intentPrevious, 0)
         val pendingIntentPlay = PendingIntent.getActivity(context, 800, intentPlay, 0)
         val pendingIntentNext = PendingIntent.getActivity(context, 800, intentNext, 0)
-        val Bitmap = BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.ic_not)
+
+        val Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_not)
+
 
         return NotificationCompat.Builder(context, MainActivity.NOTIFICATION_CHANNEL_HIGH)
             .setSmallIcon(R.drawable.ic_music)
-            .setContentTitle("Song")
-            .setContentText("Artist")
+            .setContentTitle(name)
+            .setContentText(artist)
             .setLargeIcon(Bitmap)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .addAction(R.drawable.ic_skip_previous, "Previous", pendingIntentPrevious)
