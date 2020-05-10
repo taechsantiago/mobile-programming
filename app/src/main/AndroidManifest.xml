@@ -19,7 +19,25 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".service.MediaPlaybackService">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+
+        <!--
+             Permite hacer la conexcion entre la notificacion con la seccion enlazada al servicio
+             se agrega para usar MediaButtonReceiver.buildMediaButtonPendingIntent que se
+             encarga de convertir la accion de cada boton en un pending intent
+        -->
+        <receiver android:name="androidx.media.session.MediaButtonReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON"/>
+            </intent-filter>
+        </receiver>
+
     </application>
     <permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
+
 
 </manifest>

@@ -17,10 +17,10 @@ class AlbumsFragment : Fragment(){
     private lateinit var mView: View
 
     val albums = arrayListOf(
-        AlbumsView(R.drawable.am, "Arctic Monkeys", "AM"),
-        AlbumsView(R.drawable.colores, "J Balvin", "Colores"),
-        AlbumsView(R.drawable.yh, "Bad Bunny", "YHLQMDLG"),
-        AlbumsView(R.drawable.quepasa, "La Toma", "¿Que pasa en casa?")
+        AlbumsView(R.drawable.album_am, "Arctic Monkeys", "AM"),
+        AlbumsView(R.drawable.album_colores, "J Balvin", "Colores"),
+        AlbumsView(R.drawable.album_yhlqmdlg, "Bad Bunny", "YHLQMDLG"),
+        AlbumsView(R.drawable.album_la_toma, "La Toma", "¿Que pasa en casa?")
     )
 
     override fun onCreateView(

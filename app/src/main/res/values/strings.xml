@@ -11,4 +11,6 @@
     <string name="play_track">Playing</string>
     <string name="album_track">AM</string>
 
+    <string name="repeat">Repeat</string>
+
 </resources>

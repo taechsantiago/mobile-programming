@@ -5,11 +5,14 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -23,6 +26,7 @@ import com.example.taller_3.AppConstants.Companion.ACTION_PLAY
 import com.example.taller_3.AppConstants.Companion.ACTION_PREVIOUS
 import com.example.taller_3.DataBase.Tracks
 import com.example.taller_3.DataBase.TracksViewModel
+import com.example.taller_3.service.adapter.IndexMedia
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -31,18 +35,13 @@ class MainActivity : AppCompatActivity() {
         const val NOTIFICATION_ID_BASIC = 100
 
     }
-
-
     private lateinit var tracksViewModel: TracksViewModel
     private lateinit var tracks: Tracks
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-
 
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
@@ -52,10 +51,14 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        if(intent.hasExtra(AppConstants.EXTRA_FRAGMENT)){
+            navController.navigate(R.id.track_description)
+        }
+
         tracksViewModel= ViewModelProvider(this).get(TracksViewModel::class.java)
+
         addTracks()
     }
-
     private fun addTracks() {
         tracksViewModel.saveTrack(Tracks(0,"25/8","Bad Bunny","2:43","YHLQMDLG",R.raw.a25_8_yhlqmdlg,R.drawable.album_yhlqmdlg))
         tracksViewModel.saveTrack(Tracks(1,"Amarillo","J Balvin","2:43","Colores",R.raw.amarillo_colores,R.drawable.album_colores))
@@ -92,11 +95,6 @@ class MainActivity : AppCompatActivity() {
         tracksViewModel.saveTrack(Tracks(32,"Why'd you only call me when you're high","Arctic Monkeys","2:43","AM",R.raw.whyd_you_only_call_me_when_youre_high_am,R.drawable.album_am))
         tracksViewModel.saveTrack(Tracks(33,"Yo perreo sola","Bad Bunny","2:43","YHLQMDLG",R.raw.yo_perreo_sola_yhlqmdlg,R.drawable.album_yhlqmdlg))
     }
-
-
-
-
-
 }
 
 
