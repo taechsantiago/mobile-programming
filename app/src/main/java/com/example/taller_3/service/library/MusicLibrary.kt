@@ -277,14 +277,14 @@ object MusicLibrary {
         )
 
         createMediaMetadataCompat(
-            "bichiyal_yhlqmdlg",
+            "hablamos_manana_yhlqmdlg",
             "Hablamos mañana",
             "Bad Bunny",
             "YHLQMDLG",
             "TRAP",
             266,
             TimeUnit.SECONDS,
-            "bichiyal_yhlqmdlg.mp3",
+            "hablamos_manana_yhlqmdlg.mp3",
             R.drawable.album_yhlqmdlg,
             "album_yhlqmdlg"
         )
@@ -342,14 +342,14 @@ object MusicLibrary {
         )
 
         createMediaMetadataCompat(
-            "ignorantes_yhlqmdlg",
+            "la_dificil_yhlqmdlg",
             "La dificil",
             "Bad Bunny",
             "YHLQMDLG",
             "TRAP",
             192,
             TimeUnit.SECONDS,
-            "ignorantes_yhlqmdlg.mp3",
+            "la_dificil_yhlqmdlg.mp3",
             R.drawable.album_yhlqmdlg,
             "album_yhlqmdlg"
         )
@@ -404,6 +404,162 @@ object MusicLibrary {
             "no_1_party_anthem_am.mp3",
             R.drawable.album_am,
             "album_am"
+        )
+
+        createMediaMetadataCompat(
+            "one_for_the_road_am",
+            "One for the road",
+            "Arctic Monkeys",
+            "AM",
+            "Alternative Rock",
+            206,
+            TimeUnit.SECONDS,
+            "one_for_the_road_am.mp3",
+            R.drawable.album_am,
+            "album_am"
+        )
+
+        createMediaMetadataCompat(
+            "pero_ya_no_yhlqmdlg",
+            "Pero ya no",
+            "Bad Bunny",
+            "YHLQMDLG",
+            "TRAP",
+            165,
+            TimeUnit.SECONDS,
+            "pero_ya_no_yhlqmdlg.mp3",
+            R.drawable.album_yhlqmdlg,
+            "album_yhlqmdlg"
+        )
+
+        createMediaMetadataCompat(
+            "r_u_mine_am",
+            "RU mine",
+            "Arctic Monkeys",
+            "AM",
+            "Alternative Rock",
+            224,
+            TimeUnit.SECONDS,
+            "r_u_mine_am.mp3",
+            R.drawable.album_am,
+            "album_am"
+        )
+
+        createMediaMetadataCompat(
+            "rojo_colores",
+            "Rojo",
+            "J Balvin",
+            "Colores",
+            "reggaeton",
+            13,
+            TimeUnit.SECONDS,
+            "rojo_colores.mp3",
+            R.drawable.album_colores,
+            "album_colores"
+        )
+
+        createMediaMetadataCompat(
+            "rosado_colores",
+            "Rosado",
+            "J Balvin",
+            "Colores",
+            "reggaeton",
+            13,
+            TimeUnit.SECONDS,
+            "rosado_colores.mp3",
+            R.drawable.album_colores,
+            "album_colores"
+        )
+
+        createMediaMetadataCompat(
+            "safaera_yhlqmdlg",
+            "Safaera",
+            "Bad Bunny",
+            "YHLQMDLG",
+            "TRAP",
+            295,
+            TimeUnit.SECONDS,
+            "safaera_yhlqmdlg.mp3",
+            R.drawable.album_yhlqmdlg,
+            "album_yhlqmdlg"
+        )
+
+        createMediaMetadataCompat(
+            "si_veo_a_tu_mama_yhlqmdlg",
+            "Si veo a tu mama",
+            "Bad Bunny",
+            "YHLQMDLG",
+            "TRAP",
+            265,
+            TimeUnit.SECONDS,
+            "si_veo_a_tu_mama_yhlqmdlg.mp3",
+            R.drawable.album_yhlqmdlg,
+            "album_yhlqmdlg"
+        )
+
+        createMediaMetadataCompat(
+            "snap_out_of_it_am",
+            "Snap out of it",
+            "Arctic Monkeys",
+            "AM",
+            "Alternative Rock",
+            247,
+            TimeUnit.SECONDS,
+            "snap_out_of_it_am.mp3",
+            R.drawable.album_am,
+            "album_am"
+        )
+
+        createMediaMetadataCompat(
+            "solia_yhlqmdlg",
+            "Solia",
+            "Bad Bunny",
+            "YHLQMDLG",
+            "TRAP",
+            159,
+            TimeUnit.SECONDS,
+            "solia_yhlqmdlg.mp3",
+            R.drawable.album_yhlqmdlg,
+            "album_yhlqmdlg"
+        )
+
+        createMediaMetadataCompat(
+            "verde_colores",
+            "Verde",
+            "J Balvin",
+            "Colores",
+            "reggaeton",
+            13,
+            TimeUnit.SECONDS,
+            "verde_colores.mp3",
+            R.drawable.album_colores,
+            "album_colores"
+        )
+
+        createMediaMetadataCompat(
+            "whyd_you_only_call_me_when_youre_high_am",
+            "Why'd you only call me when you're high",
+            "Arctic Monkeys",
+            "AM",
+            "Alternative Rock",
+            163,
+            TimeUnit.SECONDS,
+            "whyd_you_only_call_me_when_youre_high_am.mp3",
+            R.drawable.album_am,
+            "album_am"
+        )
+
+        createMediaMetadataCompat(
+            "yo_perreo_sola_yhlqmdlg",
+            "Yo perreo sola",
+            "Bad Bunny",
+            "YHLQMDLG",
+            "TRAP",
+            200,
+            TimeUnit.SECONDS,
+            "yo_perreo_sola_yhlqmdlg.mp3",
+            R.drawable.album_yhlqmdlg,
+            "album_yhlqmdlg"
         )
 
     }

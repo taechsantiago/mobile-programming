@@ -12,5 +12,6 @@
     <string name="album_track">AM</string>
 
     <string name="repeat">Repeat</string>
+    <string name="random">Random</string>
 
 </resources>

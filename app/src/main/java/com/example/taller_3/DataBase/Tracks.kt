@@ -11,6 +11,5 @@ data class Tracks(
     @ColumnInfo var artist: String,
     @ColumnInfo var duration: String,
     @ColumnInfo var album: String,
-    @ColumnInfo var song: Int,
     @ColumnInfo var image: Int
 )

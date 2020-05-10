@@ -23,11 +23,8 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taller_3.AppConstants
 import com.example.taller_3.DataBase.Tracks
-import com.example.taller_3.MainActivity
-import com.example.taller_3.NotificationActionActivity
 import com.example.taller_3.R
 import kotlinx.android.synthetic.main.item_track.view.*
-import java.security.AccessController.getContext
 
 
 class TracksListAdapter internal constructor(private val context: Context) : RecyclerView.Adapter<TracksListAdapter.ViewHolder>() {
