@@ -6,6 +6,7 @@ import android.os.SystemClock
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
+import com.example.taller_3.AppConstants
 import com.example.taller_3.R
 import com.example.taller_3.service.library.MusicLibrary
 
@@ -102,8 +103,13 @@ class MyMediaPlayerAdapter(private val context: Context, private val listener: P
         val stateBuilder = PlaybackStateCompat.Builder()
         stateBuilder.setActions(availableActions())
         stateBuilder.addCustomAction(
-            PlaybackStateCompat.CustomAction.Builder(CUSTOM_ACTION_REPEAT,context.resources.getString(
+            PlaybackStateCompat.CustomAction.Builder(AppConstants.CUSTOM_ACTION_REPEAT,context.resources.getString(
                 R.string.repeat),mContext.resources.getIdentifier("repeat_song","drawable",mContext.packageName))
+                .build()
+        )
+        stateBuilder.addCustomAction(
+            PlaybackStateCompat.CustomAction.Builder(AppConstants.CUSTOM_ACTION_RANDOM,context.resources.getString(
+                R.string.random),mContext.resources.getIdentifier("random_song","drawable",mContext.packageName))
                 .build()
         )
         stateBuilder.setState(

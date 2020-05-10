@@ -1,10 +1,8 @@
 package com.example.taller_3.ui.tracks
 
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
@@ -17,22 +15,21 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.taller_3.AppConstants
 import com.example.taller_3.DataBase.TracksViewModel
-import com.example.taller_3.DynamicBroadcastReceiver
 import com.example.taller_3.R
-import com.example.taller_3.SongChangeBroadcastReceiver
+import com.example.taller_3.broadcast.RandomRepeatSong
+import com.example.taller_3.broadcast.RandomRepeatSongBroadcastReceiver
+import com.example.taller_3.broadcast.SongChangeBroadcastReceiver
 import com.example.taller_3.service.MediaPlaybackService
 import com.example.taller_3.service.MyMediaPlaybackHelper
-import com.example.taller_3.service.adapter.IndexMedia
-import com.example.taller_3.service.adapter.SongChangeDuringPlay
+import com.example.taller_3.broadcast.SongChangeDuringPlay
 import com.example.taller_3.service.library.MusicLibrary
-import kotlin.properties.Delegates
 
-class TracksDescriptionFragment: Fragment(),SongChangeDuringPlay {
+class TracksDescriptionFragment: Fragment(),
+    SongChangeDuringPlay, RandomRepeatSong {
 
     private lateinit var mView: View
 
@@ -57,8 +54,9 @@ class TracksDescriptionFragment: Fragment(),SongChangeDuringPlay {
 
 
     private var repeat_btn_press=false
+    private var random_btn_press=false
     private var song_change_playing=false
-    private lateinit var action: String
+    private lateinit var access_notification: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,7 +65,13 @@ class TracksDescriptionFragment: Fragment(),SongChangeDuringPlay {
     ): View? {
         mView = inflater.inflate(R.layout.fragment_tracks_description, container, false)
 
+        context?.applicationContext?.registerReceiver(
+            SongChangeBroadcastReceiver(
+                this
+            ),IntentFilter(AppConstants.ACTION_SERVICE_CHANGE_SONG))
+
         context?.applicationContext?.registerReceiver(SongChangeBroadcastReceiver(this),IntentFilter(AppConstants.ACTION_SERVICE_CHANGE_SONG))
+        context?.applicationContext?.registerReceiver(RandomRepeatSongBroadcastReceiver(this),IntentFilter(AppConstants.ACTION_SERVICE_RANDOM_REPEAT))
 
         tracksViewModel = activity?.run {
             ViewModelProvider(this).get(TracksViewModel::class.java)
@@ -76,6 +80,7 @@ class TracksDescriptionFragment: Fragment(),SongChangeDuringPlay {
         arguments?.apply {
             track_code=getInt("track_code")
             song_change_playing=getBoolean("song_change_playing")
+            access_notification=getString("access_notification")?:""
         }
 
         album_img=mView.findViewById(R.id.track_album_img_description)
@@ -96,11 +101,16 @@ class TracksDescriptionFragment: Fragment(),SongChangeDuringPlay {
         repeat_btn.setOnClickListener { repeatSong() }
 
         random_btn=mView.findViewById(R.id.random_song_btn)
+        random_btn.setOnClickListener { randomSong() }
 
         mMediaBrowserHelper = context?.let { MediaBrowserConnection(it) }
         (mMediaBrowserHelper as MediaBrowserConnection).registerCallback(MediaBrowserListener())
 
         tracksViewModel= ViewModelProvider(this).get(TracksViewModel::class.java)
+
+        if(access_notification!=""){
+            play_btn.setBackgroundResource(R.drawable.song_pause_notification)
+        }
 
         return mView
     }
@@ -146,13 +156,23 @@ class TracksDescriptionFragment: Fragment(),SongChangeDuringPlay {
             mMediaBrowserHelper?.getTransportControls()?.sendCustomAction("REPEAT",null)
             repeat_btn.setBackgroundResource(R.drawable.repeat_click_song)
             repeat_btn_press=true
-            Log.d("Repetir_musica","Se desea repetir la musica.Main")
         }
         else{
             mMediaBrowserHelper?.getTransportControls()?.sendCustomAction("NOT_REPEAT",null)
             repeat_btn.setBackgroundResource(R.drawable.repeat_song)
             repeat_btn_press=false
-            Log.d("Repetir_musica","No se desea repetir la musica.Main")
+        }
+    }
+    private fun randomSong() {
+        if(random_btn_press==false){
+            mMediaBrowserHelper?.getTransportControls()?.sendCustomAction("RANDOM",null)
+            random_btn.setBackgroundResource(R.drawable.random_click_song)
+            random_btn_press=true
+        }
+        else{
+            mMediaBrowserHelper?.getTransportControls()?.sendCustomAction("NOT_RANDOM",null)
+            random_btn.setBackgroundResource(R.drawable.random_song)
+            random_btn_press=false
         }
     }
 
@@ -162,14 +182,11 @@ class TracksDescriptionFragment: Fragment(),SongChangeDuringPlay {
             parentId: String,
             children: MutableList<MediaBrowserCompat.MediaItem>
         ) {
-            Log.d("MediaPlaybackService","Enviando indice inicial, desde el fragmento")
-            val intent=Intent(AppConstants.ACTION_SERVICE_INDEX).apply {
-                putExtra("INDEX_MEDIA", track_code)
-            }
-            context?.applicationContext?.sendBroadcast(intent)
-
-            if(children.isEmpty()){
-                Log.d("MediaPlaybackService","musica vacia, fragmento")
+            if(access_notification=="") {
+                val intent = Intent(AppConstants.ACTION_SERVICE_INDEX).apply {
+                    putExtra("INDEX_MEDIA", track_code)
+                }
+                context?.applicationContext?.sendBroadcast(intent)
             }
 
             val mediaController = getMediaController()
@@ -205,6 +222,17 @@ class TracksDescriptionFragment: Fragment(),SongChangeDuringPlay {
 
     override fun changeSong(intent: Intent) {
         song_change_playing=intent.getBooleanExtra("CHANGE_SONG",true)
+    }
+
+    override fun randomRepeatSong(intent: Intent) {
+        random_btn_press=intent.getBooleanExtra("RANDOM_SONG",false)
+        if(random_btn_press){
+            random_btn.setBackgroundResource(R.drawable.random_click_song)
+        }
+        repeat_btn_press=intent.getBooleanExtra("REPEAT_SONG",false)
+        if(repeat_btn_press){
+            repeat_btn.setBackgroundResource(R.drawable.repeat_click_song)
+        }
     }
 
 }

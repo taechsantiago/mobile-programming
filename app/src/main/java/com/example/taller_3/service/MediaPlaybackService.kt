@@ -1,6 +1,5 @@
 package com.example.taller_3.service
 
-import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
@@ -14,8 +13,8 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.media.MediaBrowserServiceCompat
 import com.example.taller_3.AppConstants
-import com.example.taller_3.DynamicBroadcastReceiver
-import com.example.taller_3.service.adapter.IndexMedia
+import com.example.taller_3.broadcast.IndexBroadcastReceiver
+import com.example.taller_3.broadcast.IndexMedia
 import com.example.taller_3.service.adapter.MyMediaPlayerAdapter
 import com.example.taller_3.service.adapter.MyPlayerAdapter
 import com.example.taller_3.service.adapter.PlaybackInfoListener
@@ -23,7 +22,8 @@ import com.example.taller_3.service.library.MusicLibrary
 import com.example.taller_3.service.notification.MediaNotification
 import java.util.ArrayList
 
-class MediaPlaybackService: MediaBrowserServiceCompat(), IndexMedia{
+class MediaPlaybackService: MediaBrowserServiceCompat(),
+    IndexMedia {
 
     private val MY_MEDIA_ROOT_ID = "media_root_id"
     private val MY_EMPTY_MEDIA_ROOT_ID = "empty_root_id"
@@ -35,6 +35,7 @@ class MediaPlaybackService: MediaBrowserServiceCompat(), IndexMedia{
     private var callback: MediaSessionCallback?=null
     private var mServiceInStartedState = false
     private var repeatActive=false
+    private var randomActive=false
 
     var startindexMedia=0
 
@@ -42,7 +43,10 @@ class MediaPlaybackService: MediaBrowserServiceCompat(), IndexMedia{
     override fun onCreate() {
         super.onCreate()
         Log.d(TAG,"Oncreate, Service")
-        applicationContext.registerReceiver(DynamicBroadcastReceiver(this),IntentFilter(AppConstants.ACTION_SERVICE_INDEX))
+        applicationContext.registerReceiver(
+            IndexBroadcastReceiver(
+                this
+            ),IntentFilter(AppConstants.ACTION_SERVICE_INDEX))
 
         callback=MediaSessionCallback()
 
@@ -101,7 +105,7 @@ class MediaPlaybackService: MediaBrowserServiceCompat(), IndexMedia{
         override fun onStateChanged(state: PlaybackStateCompat) {
             mediaSession!!.setPlaybackState(state)
             when (state.state) {
-                PlaybackStateCompat.STATE_PLAYING -> mServiceManager.moveServiceToStartedState(state)
+                PlaybackStateCompat.STATE_PLAYING -> { mServiceManager.moveServiceToStartedState(state) }
                 PlaybackStateCompat.STATE_PAUSED -> mServiceManager.updateNotificationForPause(state)
                 PlaybackStateCompat.STATE_STOPPED -> mServiceManager.moveServiceOutOfStartedState(state)
             }
@@ -115,19 +119,28 @@ class MediaPlaybackService: MediaBrowserServiceCompat(), IndexMedia{
             }
             applicationContext?.sendBroadcast(intent)
 
-            if(!repeatActive) {
-                Log.d(TAG,"Modo de reproduccion continua desactivado")
-                if ((callback?.getPlayListSize()?.minus(1)) != callback?.getQueueIndex()) {
+            if(!randomActive){
+                Log.d(TAG,"Modo de reproduccion aleatoria desactivado")
+                if(!repeatActive) {
+                    Log.d(TAG,"Modo de reproduccion continua desactivado")
+                    if ((callback?.getPlayListSize()?.minus(1)) != callback?.getQueueIndex()) {
+                        mPlayback?.setNewState(PlaybackStateCompat.STATE_PLAYING)
+                        callback?.onSkipToNext()
+                    } else {
+                        mPlayback?.setNewState(PlaybackStateCompat.STATE_PAUSED)
+                    }
+                }
+                else{
+                    Log.d(TAG,"Modo de reproduccion continua activado")
                     mPlayback?.setNewState(PlaybackStateCompat.STATE_PLAYING)
                     callback?.onSkipToNext()
-                } else {
-                    mPlayback?.setNewState(PlaybackStateCompat.STATE_PAUSED)
                 }
             }
             else{
-                Log.d(TAG,"Modo de reproduccion continua activado")
+                Log.d(TAG,"Modo de reproduccion aleatoria activado")
                 mPlayback?.setNewState(PlaybackStateCompat.STATE_PLAYING)
-                callback?.onSkipToNext()
+                callback?.indexRandomPrevious(callback!!.getQueueIndex())
+                callback?.randomIsActive()
             }
         }
 
@@ -170,6 +183,7 @@ class MediaPlaybackService: MediaBrowserServiceCompat(), IndexMedia{
 
         private val playList: MutableList<MediaSessionCompat.QueueItem> = ArrayList()
         private var mQueueIndex = -1
+        private var mQueueIndexPrevious=0
         private var mediaMetadata: MediaMetadataCompat? = null
 
         override fun onAddQueueItem(description: MediaDescriptionCompat) {
@@ -179,7 +193,17 @@ class MediaPlaybackService: MediaBrowserServiceCompat(), IndexMedia{
                     description.hashCode().toLong()
                 )
             )
-            Log.e(TAG, "Indice actual: ${mQueueIndex}")
+            if(randomActive||repeatActive) {
+                val intent = Intent(AppConstants.ACTION_SERVICE_RANDOM_REPEAT).apply {
+                    if (randomActive) {
+                        putExtra("RANDOM_SONG", true)
+                    }
+                    if (repeatActive) {
+                        putExtra("REPEAT_SONG", true)
+                    }
+                }
+                applicationContext?.sendBroadcast(intent)
+            }
             //debe estar el numero que se va a iniciar la reproducion
             mQueueIndex = if (mQueueIndex == -1) startindexMedia else mQueueIndex
             mediaSession!!.setQueue(playList)
@@ -213,6 +237,7 @@ class MediaPlaybackService: MediaBrowserServiceCompat(), IndexMedia{
             if(mediaMetadata==null){
                 onPrepare()
             }
+
             mPlayback?.playFromMedia(mediaMetadata)
             Log.d(TAG,"reproduccion playFromMedia")
         }
@@ -226,36 +251,60 @@ class MediaPlaybackService: MediaBrowserServiceCompat(), IndexMedia{
             mediaSession!!.isActive=false
         }
         override fun onSkipToPrevious() {
-            Log.d(TAG,"debe cambiar cancion anterior")
-            if (mQueueIndex > 0) {
-                mQueueIndex -= 1
+            if(!randomActive) {
+                Log.d(TAG, "debe cambiar cancion anterior")
+                if (mQueueIndex > 0) {
+                    mQueueIndex -= 1
+                } else {
+                    mQueueIndex = playList.size - 1
+                }
+                mediaMetadata = null
+                onPlay()
             }
             else{
-                mQueueIndex= playList.size - 1
+                mQueueIndex=mQueueIndexPrevious
+                mediaMetadata = null
+                onPlay()
             }
-            mediaMetadata = null
-            onPlay()
         }
         override fun onSkipToNext() {
-            Log.d(TAG,"debe cambiar cancion siguiente")
-            mQueueIndex = ++mQueueIndex % playList.size
-            mediaMetadata = null
-            onPlay()
-        }
-        override fun onCustomAction(action: String?, extras: Bundle?) {
-            if("REPEAT"==action) {
-                repeatActive=true
-                Log.e(TAG, "Custom action is ${action}")
+            if(!randomActive) {
+                Log.d(TAG, "debe cambiar cancion siguiente")
+                mQueueIndexPrevious=mQueueIndex
+                mQueueIndex = ++mQueueIndex % playList.size
+                mediaMetadata = null
+                onPlay()
             }
             else{
-                repeatActive=false
-                Log.e(TAG, "Custom action is ${action}")
+                mQueueIndexPrevious=mQueueIndex
+                randomIsActive()
+            }
+        }
+        override fun onCustomAction(action: String?, extras: Bundle?) {
+            when (action) {
+                "REPEAT" -> {
+                    repeatActive=true
+                    Log.e(TAG, "Custom action is ${action}")
+                }
+                "NOT_REPEAT" -> {
+                    repeatActive=false
+                    Log.e(TAG, "Custom action is ${action}")
+                }
+                "RANDOM" -> {
+                    randomActive=true
+                    Log.e(TAG, "Custom action is ${action}")
+                }
+                "NOT_RANDOM" -> {
+                    randomActive=false
+                    Log.e(TAG, "Custom action is ${action}")
+                }
             }
         }
 
         private fun isReadyToPlay(): Boolean {
             return playList.isNotEmpty()
         }
+
         fun getQueueIndex():Int{
             return mQueueIndex
         }
@@ -264,6 +313,15 @@ class MediaPlaybackService: MediaBrowserServiceCompat(), IndexMedia{
         }
         fun getPlayListSize():Int{
             return playList.size
+        }
+
+        fun randomIsActive(){
+            mQueueIndex=(0 until playList.size).random()
+            onPrepare()
+            onPlay()
+        }
+        fun indexRandomPrevious(index: Int){
+            mQueueIndexPrevious=index
         }
     }
 
