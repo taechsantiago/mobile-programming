@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +35,6 @@ class TracksListAdapter internal constructor(private val context: Context) : Rec
     private var tracksList = emptyList<Tracks>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        createNotificationChannel()
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_track, parent, false)
         return ViewHolder(
             view,
@@ -59,56 +59,17 @@ class TracksListAdapter internal constructor(private val context: Context) : Rec
         holder.duration.text="${track.duration}"
 
         holder.view.setOnClickListener {
-            val bundle = bundleOf("track_code" to track.code)
+
+            Log.d("MediaPlaybackService","Enviando indice inicial, desde el adapter")
+            val intent=Intent(AppConstants.ACTION_SERVICE_INDEX).apply {
+                putExtra("INDEX_MEDIA", track.code)
+            }
+            context.applicationContext?.sendBroadcast(intent)
+
+            val bundle = bundleOf("song_change_playing" to true,"track_code" to track.code)
             holder.view.findNavController().navigate(R.id.action_track_to_track_description, bundle)
-            showCustomMessageNotification(track.artist, track.name)
         }
 
-    }
-
-    fun showCustomMessageNotification(artist: String, name: String) {
-        NotificationManagerCompat.from(context).notify(MainActivity.NOTIFICATION_ID_BASIC, showBasicNotification(artist,name))
-    }
-
-    fun showBasicNotification(artist: String, name: String) : Notification {
-
-        val intentPrevious = Intent(AppConstants.ACTION_PREVIOUS, null, context, NotificationActionActivity::class.java)
-        val intentPlay = Intent(AppConstants.ACTION_PLAY, null, context, NotificationActionActivity::class.java)
-        val intentNext = Intent(AppConstants.ACTION_NEXT, null, context, NotificationActionActivity::class.java)
-
-        val pendingIntentPrevious = PendingIntent.getActivity(context, 800, intentPrevious, 0)
-        val pendingIntentPlay = PendingIntent.getActivity(context, 800, intentPlay, 0)
-        val pendingIntentNext = PendingIntent.getActivity(context, 800, intentNext, 0)
-
-        val Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_not)
-
-
-        return NotificationCompat.Builder(context, MainActivity.NOTIFICATION_CHANNEL_HIGH)
-            .setSmallIcon(R.drawable.ic_music)
-            .setContentTitle(name)
-            .setContentText(artist)
-            .setLargeIcon(Bitmap)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .addAction(R.drawable.ic_skip_previous, "Previous", pendingIntentPrevious)
-            .addAction(R.drawable.ic_play, "Play", pendingIntentPlay)
-            .addAction(R.drawable.ic_skip_next, "Next", pendingIntentNext)
-            .setStyle(androidx.media.app.NotificationCompat.MediaStyle().setShowActionsInCompactView(0,1,2))
-            .setSubText("Music Player")
-            .build()
-
-    }
-
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(
-                MainActivity.NOTIFICATION_CHANNEL_HIGH,
-                "High",
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationChannel.description = "High"
-
-            NotificationManagerCompat.from(context).createNotificationChannel(notificationChannel)
-        }
     }
 
     inner class ViewHolder(
