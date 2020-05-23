@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_albums"
-        android:name="com.example.taller_3.ui.albums.AlbumsFragment"
+        android:name="com.audia.taller_3.ui.albums.AlbumsFragment"
         android:label="@string/title_albums"
         tools:layout="@layout/fragment_albums" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/albumlist"
-        android:name="com.example.taller_3.ui.albums.AlbumTrackListFragment"
+        android:name="com.audia.taller_3.ui.albums.AlbumTrackListFragment"
         android:label="Album List"
         tools:layout="@layout/fragment_album_tracks_list">
         <action
@@ -26,13 +26,13 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.taller_3.ui.home.HomeFragment"
+        android:name="com.audia.taller_3.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_tracks"
-        android:name="com.example.taller_3.ui.tracks.TracksFragment"
+        android:name="com.audia.taller_3.ui.tracks.TracksFragment"
         android:label="@string/title_tracks"
         tools:layout="@layout/fragment_tracks">
         <action
@@ -41,7 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/track_description"
-        android:name="com.example.taller_3.ui.tracks.TracksDescriptionFragment"
+        android:name="com.audia.taller_3.ui.tracks.TracksDescriptionFragment"
         android:label="@string/title_track_description"
         tools:layout="@layout/fragment_tracks_description" />
 </navigation>

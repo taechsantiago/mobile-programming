@@ -2,17 +2,18 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.example.taller_3"
+        applicationId "com.audia.taller_3"
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -62,4 +63,17 @@ dependencies {
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //multidex
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    //firebase core
+    implementation 'com.google.firebase:firebase-core:17.0.0'
+
+    //firestore
+    implementation 'com.google.firebase:firebase-firestore-ktx:21.4.3'
+
+    //storage
+    implementation 'com.google.firebase:firebase-storage-ktx:19.1.0'
+    implementation 'com.firebaseui:firebase-ui-storage:4.3.1'
 }
