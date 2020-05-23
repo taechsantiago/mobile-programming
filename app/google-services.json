@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "161911574413",
+    "firebase_url": "https://pmovil-audia-sta.firebaseio.com",
+    "project_id": "pmovil-audia-sta",
+    "storage_bucket": "pmovil-audia-sta.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161911574413:android:e4518144ebfd6bb1dd77c4",
+        "android_client_info": {
+          "package_name": "com.audia.taller_3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "161911574413-0834po5ka4ae1tb6gfjqc65b1iahhb6q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.audia.taller_3",
+            "certificate_hash": "83c4722244909d3eb8b6fb67690f47d1e01f629b"
+          }
+        },
+        {
+          "client_id": "161911574413-ejn2e1g8sstatin67b3hv660hdks185l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVfhW5ijHTCvsGTtJdckxD5fFBZuLV60k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "161911574413-ejn2e1g8sstatin67b3hv660hdks185l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
