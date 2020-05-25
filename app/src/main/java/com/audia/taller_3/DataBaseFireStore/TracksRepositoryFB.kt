@@ -5,10 +5,6 @@ import com.audia.taller_3.DataBase.Tracks
 
 class TracksRepositoryFB(private val tracksDaoFB: TracksDaoFB){
     val tracksList: LiveData<List<TracksFB>> =tracksDaoFB.getAll()
-    val amTrackList:LiveData<List<TracksFB>> =tracksDaoFB.getAll()
-    val coloresTrackList:LiveData<List<TracksFB>> =tracksDaoFB.getAll()
-    val yhlqmdlgTrackList:LiveData<List<TracksFB>> =tracksDaoFB.getAll()
-    val quepasaTrackList:LiveData<List<TracksFB>> =tracksDaoFB.getAll()
 
     //se usa para agregar las canciones a la tabla tracks
     suspend fun insert(vararg tracks: TracksFB) {

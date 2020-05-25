@@ -3,6 +3,7 @@ package com.audia.taller_3.DataBaseFireStore
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.audia.taller_3.service.library.MusicLibrary
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -11,6 +12,8 @@ class TracksDaoFB(private val firestore: FirebaseFirestore):TracksDAO {
     private val TAG = "TracksDaoFireStore"
     private var collection:CollectionReference = firestore.collection("TRACKS")
     private var trackList:MutableLiveData<List<TracksFB>> = MutableLiveData()
+    private var albumTrackList:MutableLiveData<List<TracksFB>> = MutableLiveData()
+    var trackListToLibrary:List<TracksFB> = emptyList()
 
     override fun getAll(): LiveData<List<TracksFB>> {
         collection.addSnapshotListener { value, exception ->
@@ -24,11 +27,33 @@ class TracksDaoFB(private val firestore: FirebaseFirestore):TracksDAO {
             }
             trackList.value=tracklistTemp
         }
+
+        collection.get()
+            .addOnSuccessListener { trackListToLibrary=it.toObjects(TracksFB::class.java)
+                MusicLibrary.setMusic(trackListToLibrary)
+            }
         return trackList
     }
 
     override fun findByCode(code: Int): TracksFB {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun findByAlbum(album: String): LiveData<List<TracksFB>> {
+        collection.whereEqualTo("album",album).addSnapshotListener { value, exception ->
+            if(exception!=null){
+                Log.d(TAG,"Error al obtener los datos de firebastore")
+                return@addSnapshotListener
+            }
+            val tracklistTemp: MutableList<TracksFB> = mutableListOf()
+            for(doc in value!!){
+                tracklistTemp.add(doc.toObject(TracksFB::class.java))
+            }
+            trackList.value=tracklistTemp
+        }
+        collection.get()
+            .addOnSuccessListener { trackListToLibrary=it.toObjects(TracksFB::class.java)}
+        return albumTrackList
     }
 
     override fun insert(vararg tracks: TracksFB) {

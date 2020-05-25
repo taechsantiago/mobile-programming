@@ -1,6 +1,7 @@
 package com.audia.taller_3.DataBaseFireStore
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -9,12 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class TracksViewModelFB (application: Application) : AndroidViewModel(application) {
+    private val TAG = "TracksDaoFireStore"
     private val repository: TracksRepositoryFB
     val tracksList: LiveData<List<TracksFB>>
-    val amTrackList:LiveData<List<TracksFB>>
-    val coloresTrackList:LiveData<List<TracksFB>>
-    val yhlqmdlgTrackList:LiveData<List<TracksFB>>
-    val quepasaTrackList:LiveData<List<TracksFB>>
 
     private  var firestore: FirebaseFirestore
     private  var tracksDaoFB: TracksDaoFB
@@ -27,11 +25,6 @@ class TracksViewModelFB (application: Application) : AndroidViewModel(applicatio
         tracksDaoFB= TracksDaoFB(firestore)
         repository= TracksRepositoryFB(tracksDaoFB)
         tracksList=repository.tracksList
-
-        amTrackList=repository.amTrackList
-        coloresTrackList=repository.coloresTrackList
-        yhlqmdlgTrackList=repository.yhlqmdlgTrackList
-        quepasaTrackList=repository.quepasaTrackList
     }
     //funcion con la cual se guardan productos desde la interfaz
     fun saveTrack(vararg tracks: TracksFB) = viewModelScope.launch(Dispatchers.IO) {

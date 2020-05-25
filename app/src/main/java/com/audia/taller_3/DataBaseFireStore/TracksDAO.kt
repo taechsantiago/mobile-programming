@@ -7,6 +7,8 @@ interface TracksDAO {
 
     fun findByCode(code: Int): TracksFB
 
+    fun findByAlbum(album: String): LiveData<List<TracksFB>>
+
     fun insert(vararg tracks: TracksFB)
 
     fun update(track: TracksFB)
