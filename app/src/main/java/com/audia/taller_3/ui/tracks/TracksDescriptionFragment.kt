@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.audia.taller_3.AppConstants
 import com.audia.taller_3.DataBase.TracksViewModel
+import com.audia.taller_3.DataBaseFireStore.TracksViewModelFB
 import com.audia.taller_3.R
 import com.audia.taller_3.broadcast.RandomRepeatSong
 import com.audia.taller_3.broadcast.RandomRepeatSongBroadcastReceiver
@@ -33,6 +34,7 @@ class TracksDescriptionFragment: Fragment(),
     private lateinit var mView: View
 
     private lateinit var tracksViewModel: TracksViewModel
+    private lateinit var tracksViewModelFB: TracksViewModelFB
     private var track_code=0
 
 
@@ -72,9 +74,10 @@ class TracksDescriptionFragment: Fragment(),
         context?.applicationContext?.registerReceiver(SongChangeBroadcastReceiver(this),IntentFilter(AppConstants.ACTION_SERVICE_CHANGE_SONG))
         context?.applicationContext?.registerReceiver(RandomRepeatSongBroadcastReceiver(this),IntentFilter(AppConstants.ACTION_SERVICE_RANDOM_REPEAT))
 
-        tracksViewModel = activity?.run {
-            ViewModelProvider(this).get(TracksViewModel::class.java)
+        tracksViewModelFB = activity?.run {
+            ViewModelProvider(this).get(TracksViewModelFB::class.java)
         } ?: throw Exception("Invalid Activity")
+
 
         arguments?.apply {
             track_code=getInt("track_code")
@@ -105,7 +108,6 @@ class TracksDescriptionFragment: Fragment(),
         mMediaBrowserHelper = context?.let { MediaBrowserConnection(it) }
         (mMediaBrowserHelper as MediaBrowserConnection).registerCallback(MediaBrowserListener())
 
-        tracksViewModel= ViewModelProvider(this).get(TracksViewModel::class.java)
 
         if(access_notification!=""){
             play_btn.setBackgroundResource(R.drawable.song_pause_notification)

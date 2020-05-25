@@ -14,12 +14,12 @@ import com.audia.taller_3.DataBaseFireStore.TracksDaoFB
 import com.audia.taller_3.DataBaseFireStore.TracksFB
 import com.audia.taller_3.DataBaseFireStore.TracksViewModelFB
 import com.audia.taller_3.R
+import com.audia.taller_3.service.library.MusicLibrary
 import com.google.firebase.firestore.FirebaseFirestore
 
 class TracksFragment : Fragment() {
 
     private lateinit var mView: View
-    private lateinit var tracksViewModel: TracksViewModel
     private lateinit var tracks_list_view: RecyclerView
 
     private lateinit var tracksDaoFB: TracksDaoFB
@@ -34,16 +34,10 @@ class TracksFragment : Fragment() {
         setHasOptionsMenu(true)
         mView = inflater.inflate(R.layout.fragment_tracks, container, false)
 
-        tracksViewModel = activity?.run {
-            ViewModelProvider(this).get(TracksViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
-
         tracksViewModelFB = activity?.run {
             ViewModelProvider(this).get(TracksViewModelFB::class.java)
         } ?: throw Exception("Invalid Activity")
 
-        firestore= FirebaseFirestore.getInstance()
-        tracksDaoFB= TracksDaoFB(firestore)
         addObserver()
 
         return mView
