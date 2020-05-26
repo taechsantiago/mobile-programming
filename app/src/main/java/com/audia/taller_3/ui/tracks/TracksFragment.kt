@@ -7,23 +7,17 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.audia.taller_3.Adapters.TracksListAdapter
 import com.audia.taller_3.Adapters.TracksListAdapterFB
-import com.audia.taller_3.DataBase.TracksViewModel
 import com.audia.taller_3.DataBaseFireStore.TracksDaoFB
 import com.audia.taller_3.DataBaseFireStore.TracksFB
 import com.audia.taller_3.DataBaseFireStore.TracksViewModelFB
 import com.audia.taller_3.R
-import com.audia.taller_3.service.library.MusicLibrary
 import com.google.firebase.firestore.FirebaseFirestore
 
 class TracksFragment : Fragment() {
 
     private lateinit var mView: View
     private lateinit var tracks_list_view: RecyclerView
-
-    private lateinit var tracksDaoFB: TracksDaoFB
-    private lateinit var firestore: FirebaseFirestore
     private lateinit var tracksViewModelFB: TracksViewModelFB
 
     override fun onCreateView(

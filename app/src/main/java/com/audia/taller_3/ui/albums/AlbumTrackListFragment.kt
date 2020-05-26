@@ -5,19 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.audia.taller_3.Adapters.TracksListAdapter
-import com.audia.taller_3.DataBase.TracksViewModel
 import com.audia.taller_3.R
 
 
 class AlbumTrackListFragment: Fragment() {
     private lateinit var mView: View
 
-    private lateinit var tracksViewModel: TracksViewModel
     private lateinit var album_list_recycler:RecyclerView
     private lateinit var album_name:String
     override fun onCreateView(
@@ -26,63 +20,12 @@ class AlbumTrackListFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mView = inflater.inflate(R.layout.fragment_album_tracks_list, container, false)
-        tracksViewModel= activity?.run{ViewModelProvider(this).get(TracksViewModel::class.java)
-            }?: throw Exception("Invalid activity")
 
         arguments?.apply {
             album_name=getString("Album") ?: ""
         }
 
-        addObserver()
-
         return mView
-    }
-
-    private fun addObserver() {
-        val adapter = context?.let { TracksListAdapter(it) }
-        album_list_recycler=mView.findViewById(R.id.album_list_recycler)
-        album_list_recycler.layoutManager= LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-        album_list_recycler.adapter = adapter
-
-        when (album_name) {
-            "AM" -> {
-                tracksViewModel.amTrackList.observe(viewLifecycleOwner, Observer { tracksList ->
-                    tracksList?.let {
-                        if (adapter != null) {
-                            adapter.setTracks(it)
-                        }
-                    }
-                })
-            }
-            "Colores" -> {
-                tracksViewModel.coloresTrackList.observe(viewLifecycleOwner, Observer { tracksList ->
-                    tracksList?.let {
-                        if (adapter != null) {
-                            adapter.setTracks(it)
-                        }
-                    }
-                })
-            }
-            "YHLQMDLG" -> {
-                tracksViewModel.yhlqmdlgTrackList.observe(viewLifecycleOwner, Observer { tracksList ->
-                    tracksList?.let {
-                        if (adapter != null) {
-                            adapter.setTracks(it)
-                        }
-                    }
-                })
-            }
-            else -> {
-                tracksViewModel.quepasaTrackList.observe(viewLifecycleOwner, Observer { tracksList ->
-                    tracksList?.let {
-                        if (adapter != null) {
-                            adapter.setTracks(it)
-                        }
-                    }
-                })
-            }
-        }
-
     }
 }
 

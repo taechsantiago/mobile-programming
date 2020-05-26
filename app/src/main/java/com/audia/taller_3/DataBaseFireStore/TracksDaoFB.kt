@@ -1,5 +1,6 @@
 package com.audia.taller_3.DataBaseFireStore
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,7 +8,7 @@ import com.audia.taller_3.service.library.MusicLibrary
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 
-class TracksDaoFB(private val firestore: FirebaseFirestore):TracksDAO {
+class TracksDaoFB(private val firestore: FirebaseFirestore, private val context: Context):TracksDAO {
 
     private val TAG = "TracksDaoFireStore"
     private var collection:CollectionReference = firestore.collection("TRACKS")
@@ -30,13 +31,9 @@ class TracksDaoFB(private val firestore: FirebaseFirestore):TracksDAO {
 
         collection.get()
             .addOnSuccessListener { trackListToLibrary=it.toObjects(TracksFB::class.java)
-                MusicLibrary.setMusic(trackListToLibrary)
+                MusicLibrary.setMusic(trackListToLibrary, context)
             }
         return trackList
-    }
-
-    override fun findByCode(code: Int): TracksFB {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun findByAlbum(album: String): LiveData<List<TracksFB>> {
