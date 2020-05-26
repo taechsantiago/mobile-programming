@@ -1,6 +1,7 @@
 package com.audia.taller_3.service.adapter
 
 import android.content.Context
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.SystemClock
 import android.support.v4.media.MediaMetadataCompat
@@ -9,6 +10,7 @@ import android.util.Log
 import com.audia.taller_3.AppConstants
 import com.audia.taller_3.R
 import com.audia.taller_3.service.library.MusicLibrary
+import com.google.firebase.storage.FirebaseStorage
 
 class MyMediaPlayerAdapter(private val context: Context, private val listener: PlaybackInfoListener): MyPlayerAdapter(context) {
 
@@ -25,6 +27,7 @@ class MyMediaPlayerAdapter(private val context: Context, private val listener: P
     private var mState = 0
     private var mSeekWhileNotPlaying = -1
 
+    private val storage= FirebaseStorage.getInstance()
 
 
     override fun playFromMedia(metadata: MediaMetadataCompat?) {
@@ -165,7 +168,21 @@ class MyMediaPlayerAdapter(private val context: Context, private val listener: P
         }
         mFilename = musicFilename
         initializeMediaPlayer()
-        try {
+
+        val pathReference = musicFilename?.let { storage.reference.child("tracks").child(it) }
+        pathReference?.downloadUrl?.addOnSuccessListener {
+            val urL=it.toString()
+            mMediaPlayer?.apply {
+                setAudioStreamType(AudioManager.STREAM_MUSIC)
+                setDataSource(context,it)
+            }
+            mMediaPlayer!!.prepare()
+            play()
+        }?.addOnFailureListener {
+            Log.d(TAG,"no fue posible")
+        }
+
+        /*try {
             //se abre el archivo de musica para lectura, nos permite ver su longitud
             val cancionId = mContext.resources.getIdentifier(mediaIdFile, "raw", mContext.packageName)
             val assetFileDescriptor = mContext.resources.openRawResourceFd(cancionId)
@@ -174,6 +191,7 @@ class MyMediaPlayerAdapter(private val context: Context, private val listener: P
                 assetFileDescriptor.startOffset,
                 assetFileDescriptor.length
             )
+
         } catch (e: Exception) {
             throw RuntimeException("Error al abrir el archivo: $mFilename", e)
         }
@@ -182,7 +200,7 @@ class MyMediaPlayerAdapter(private val context: Context, private val listener: P
         } catch (e: Exception) {
             throw RuntimeException("Error al abrir el archivo: $mFilename", e)
         }
-        play()
+        play()*/
     }
     private fun release() {
         if (mMediaPlayer != null) {
