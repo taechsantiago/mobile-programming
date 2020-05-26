@@ -17,7 +17,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.audia.taller_3.AppConstants
-import com.audia.taller_3.DataBase.TracksViewModel
 import com.audia.taller_3.DataBaseFireStore.TracksViewModelFB
 import com.audia.taller_3.R
 import com.audia.taller_3.broadcast.RandomRepeatSong
@@ -32,8 +31,6 @@ class TracksDescriptionFragment: Fragment(),
     SongChangeDuringPlay, RandomRepeatSong {
 
     private lateinit var mView: View
-
-    private lateinit var tracksViewModel: TracksViewModel
     private lateinit var tracksViewModelFB: TracksViewModelFB
     private var track_code=0
 

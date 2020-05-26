@@ -22,7 +22,7 @@ class TracksViewModelFB (application: Application) : AndroidViewModel(applicatio
         //se inicializan las variables correspondientes para encadenar el repository y el dao
         //con el viewmodel
         firestore= FirebaseFirestore.getInstance()
-        tracksDaoFB= TracksDaoFB(firestore)
+        tracksDaoFB= TracksDaoFB(firestore, application.baseContext)
         repository= TracksRepositoryFB(tracksDaoFB)
         tracksList=repository.tracksList
     }
@@ -30,19 +30,7 @@ class TracksViewModelFB (application: Application) : AndroidViewModel(applicatio
     fun saveTrack(vararg tracks: TracksFB) = viewModelScope.launch(Dispatchers.IO) {
         repository.insert(*tracks)
     }
-    //se usa para buscar un producto desde la interfaz por medio de un codigo
-    fun findByCode(code: Int): TracksFB {
-        return repository.findByCode(code)
-    }
     fun deleteAll(){
         repository.deleteAll()
     }
-    //se usa para buscar por medio de nombre una cancion de la tabla tracks
-    /*fun findByName(name: String): TracksFB {
-        return repository.findByName(name)
-    }
-    //se usa para buscar por medio de album una cancion de la tabla tracks
-    fun findByAlbum(album: String): LiveData<List<TracksFB>> {
-        return repository.findByAlbum(album)
-    }*/
 }

@@ -81,7 +81,6 @@ class TracksListAdapterFB internal constructor(private val context: Context) : R
     private fun loadImageWithCache(imageView: ImageView, pictureId: String){
         val filename="${pictureId}.jpg"
         val imageFile= File(context.cacheDir,filename)
-
         if(imageFile.exists()){
             imageView.setImageDrawable(Drawable.createFromPath(imageFile.absolutePath))
         }
